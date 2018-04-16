@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +14,8 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
+    "jest": "^22.4.3",
+    "lambda-tester": "^3.3.0",
     "serverless-offline": "^3.20.1"
   }
 }

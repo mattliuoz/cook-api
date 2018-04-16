@@ -1,10 +1,10 @@
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
 const uuid = require('uuid');
 const dynamo = new AWS.DynamoDB.DocumentClient();
-const env = process.env.ENV;
+//const env = process.env.ENV;
 const dynamodbTableName = process.env.DYNAMODB_TABLE
 //Get env specific config
-const config = require('./config/config');
+// const config = require('./config/config');
 
 const buildBadRequestResponse = function buildBadRequestResponse(message, requestId) {
     return {
@@ -30,9 +30,10 @@ const buildInternalErrorResponse = function buildInternalErrorResponse(message, 
 exports.handler = async (event, context, callback) => {
     try {
         const timestamp = new Date().getTime();
+        console.log(event);
 
         const data = JSON.parse(event.body);
-
+        
         if (typeof data.ingredients !== 'string') {
             const response = buildBadRequestResponse("ingredients is not string", context.requestId);
             callback(null, response);
@@ -56,7 +57,7 @@ exports.handler = async (event, context, callback) => {
             callback(null, response);
             return;
         }
-
+        console.log(dynamodbTableName);
         const payload = {
             TableName: dynamodbTableName,
             Item: {
