@@ -1,7 +1,5 @@
 ### Setup
 
-npm install -g aws-sam-local  
-
 npm install -g serverless  
 
 ### Local Dev
