@@ -30,8 +30,7 @@ const buildInternalErrorResponse = function buildInternalErrorResponse(message, 
 exports.handler = async (event, context, callback) => {
     try {
         const timestamp = new Date().getTime();
-        console.log(event);
-
+        
         const data = JSON.parse(event.body);
         
         if (typeof data.ingredients !== 'string') {
@@ -57,7 +56,7 @@ exports.handler = async (event, context, callback) => {
             callback(null, response);
             return;
         }
-        console.log(dynamodbTableName);
+
         const payload = {
             TableName: dynamodbTableName,
             Item: {
@@ -71,24 +70,24 @@ exports.handler = async (event, context, callback) => {
             },
         };
 
-
+        
         const cb = (err, data) => {
             if (err) {
-                const response = buildInternalErrorResponse(err, context.requestId);
-                context.done(null, response);
-            } else {
-                const response = {
-                    isBase64Encoded: false,
-                    statusCode: 200,
-                    body: JSON.stringify({
-                        'message': JSON.stringify(payload.Item),
-                        'input': event,
-                    }),
-                };
-                context.done(null, response);
-            }
+                //const response = buildInternalErrorResponse(err, context.requestId);
+                //context.done(null, response);
+                console.log(err);
+                throw err;
+            } 
         }
-        dynamo.put(payload, cb);
+        const response = {
+            isBase64Encoded: false,
+            statusCode: 200,
+            body: JSON.stringify({
+                'message': 'ok'
+            }),
+        };
+        context.done(null, response);
+        //dynamo.put(payload, cb);
     } catch (error) {
         const response = buildInternalErrorResponse(error);
         context.done(null, response);

@@ -5,7 +5,11 @@ npm install -g serverless
 ## Local Dev
 
 ### Run
-To run api at local, use commannd  ```serverless offline start```   
+To run api at local, use commannd  
+```
+export AWS_REGION=eu-west-2
+serverless offline start
+```   
 
 ### Unit test
 ```
