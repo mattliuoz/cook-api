@@ -1,3 +1,12 @@
 language: node_js
 node_js:
   - "8.10"
+
+before_install:
+  - node --version
+  - npm --version
+install:
+  - npm install -g serverless
+
+after_script:
+  - sls deploy
