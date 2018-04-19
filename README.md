@@ -1,16 +1,19 @@
-### Setup
+## Setup
 
 npm install -g serverless  
 
-### Local Dev
+## Local Dev
 
+### Run
 To run api at local, use commannd  ```serverless offline start```   
 
-Unit test
-```export LAMBDA_TESTER_NODE_VERSION_CHECK=false 
-npm run test```
+### Unit test
+```
+export LAMBDA_TESTER_NODE_VERSION_CHECK=false 
+npm run test
+```  
 
-### Deployment
+## Deployment
 To kick off deployment locally:   
 1) Assume role in aws that has all required access to deploy  
 2) use command ```serverless deploy ```  
