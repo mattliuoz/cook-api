@@ -1,10 +1,9 @@
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
 const uuid = require('uuid');
 const dynamo = new AWS.DynamoDB.DocumentClient();
-//const env = process.env.ENV;
+
 const dynamodbTableName = process.env.DYNAMODB_TABLE
-//Get env specific config
-// const config = require('./config/config');
+
 
 const buildBadRequestResponse = function buildBadRequestResponse(message, requestId) {
     return {
@@ -17,12 +16,10 @@ const buildBadRequestResponse = function buildBadRequestResponse(message, reques
     };
 }
 const buildInternalErrorResponse = function buildInternalErrorResponse(message, requestId) {
+    console.log(message);
     return {
         statusCode: 500,
-        body: JSON.stringify({
-            message: message,
-            requestId: requestId
-        }),
+        //body: '',
         isBase64Encoded: false
     }
 }
@@ -56,7 +53,7 @@ exports.handler = async (event, context, callback) => {
             callback(null, response);
             return;
         }
-
+        
         const payload = {
             TableName: dynamodbTableName,
             Item: {
@@ -70,24 +67,26 @@ exports.handler = async (event, context, callback) => {
             },
         };
 
+        console.log(payload);
         
         const cb = (err, data) => {
             if (err) {
-                //const response = buildInternalErrorResponse(err, context.requestId);
-                //context.done(null, response);
-                console.log(err);
-                throw err;
-            } 
+                const response = buildInternalErrorResponse(err, context.requestId);
+                context.done(null, response);
+            } else {
+                const response = {
+                    isBase64Encoded: false,
+                    statusCode: 200,
+                    body: JSON.stringify({
+                        'message': JSON.stringify(payload.Item),
+                        'input': event,
+                    }),
+                };
+                context.done(null, response);
+            }
         }
-        const response = {
-            isBase64Encoded: false,
-            statusCode: 200,
-            body: JSON.stringify({
-                'message': 'ok'
-            }),
-        };
-        context.done(null, response);
-        //dynamo.put(payload, cb);
+
+        dynamo.put(payload, cb);
     } catch (error) {
         const response = buildInternalErrorResponse(error);
         context.done(null, response);
