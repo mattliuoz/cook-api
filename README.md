@@ -28,3 +28,4 @@ npm run test
 To kick off deployment locally:   
 1) Assume role in aws that has all required access to deploy  
 2) use command ```serverless deploy ```  
+3) yES
