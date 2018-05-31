@@ -2,6 +2,17 @@ service: cook-api
 provider:
   name: aws
   runtime: nodejs8.10
+  iamRoleStatements: # permissions for all of your functions can be set here
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: arn:aws:dynamodb:*
   stage: dev
   region: ap-southeast-2
   environment:
