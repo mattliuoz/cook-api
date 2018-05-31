@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
 const uuid = require('uuid');
-const dynamo = new AWS.DynamoDB.DocumentClient();
+const dynamodb = require('./dynamodb');
 
 const dynamodbTableName = process.env.DYNAMODB_TABLE
 
@@ -27,7 +27,7 @@ const buildInternalErrorResponse = function buildInternalErrorResponse(message, 
 exports.handler = async (event, context, callback) => {
     try {
         const timestamp = new Date().getTime();
-        
+        console.log(event.body);
         const data = JSON.parse(event.body);
         
         if (typeof data.ingredients !== 'string') {
@@ -86,7 +86,7 @@ exports.handler = async (event, context, callback) => {
             }
         }
 
-        dynamo.put(payload, cb);
+        dynamodb.put(payload, cb);
     } catch (error) {
         const response = buildInternalErrorResponse(error);
         context.done(null, response);

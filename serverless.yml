@@ -36,4 +36,9 @@ resources:
 plugins:
   - serverless-dynamodb-local
   - serverless-offline
-  
+custom:
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
