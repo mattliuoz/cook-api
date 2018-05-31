@@ -71,6 +71,8 @@ exports.handler = async (event, context, callback) => {
         console.log(payload);
         
         const cb = (err, data) => {
+            console.log("*****dynamo data*****");
+            console.log(data);
             if (err) {
                 const response = buildInternalErrorResponse(err, context.requestId);
                 console.log("*****error*****");
@@ -81,7 +83,7 @@ exports.handler = async (event, context, callback) => {
                     isBase64Encoded: false,
                     statusCode: 200,
                     body: JSON.stringify({
-                        'message': JSON.stringify(payload.Item),
+                        'message': JSON.stringify(data.Item),
                         'input': event,
                     }),
                 };
@@ -90,7 +92,6 @@ exports.handler = async (event, context, callback) => {
                 context.done(null, response);
             }
         }
-
         dynamodb.put(payload, cb);
     } catch (error) {
         console.log("*****error*****");
