@@ -93,6 +93,8 @@ exports.handler = async (event, context, callback) => {
 
         dynamodb.put(payload, cb);
     } catch (error) {
+        console.log("*****error*****");
+                console.log(error);
         const response = buildInternalErrorResponse(error);
         context.done(null, response);
     }
