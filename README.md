@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mattliuoz/cook-api.svg?branch=master)](https://travis-ci.org/mattliuoz/cook-api)
+
 ## Setup
 
 ```
@@ -26,3 +28,4 @@ npm run test
 To kick off deployment locally:   
 1) Assume role in aws that has all required access to deploy  
 2) use command ```serverless deploy ```  
+3) yES
