@@ -92,7 +92,26 @@ exports.handler = async (event, context, callback) => {
                 context.done(null, response);
             }
         }
-        dynamodb.put(payload, cb);
+        dynamodb.put(payload, function(err, data) {
+            if (err) {
+              console.log("Error", err);
+              const response = {
+                isBase64Encoded: false,
+                statusCode: 500,
+                body: JSON.stringify(err),
+            };
+              context.done(null, response);
+            } else {
+              console.log("Success", data);
+              const response = {
+                isBase64Encoded: false,
+                statusCode: 200,
+                body: "",
+            };
+            context.done(null, response);
+            }
+          });
+        //dynamodb.putItem(payload, cb);
     } catch (error) {
         console.log("*****error*****");
                 console.log(error);
