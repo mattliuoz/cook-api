@@ -24,7 +24,7 @@ const buildInternalErrorResponse = function buildInternalErrorResponse(message, 
     }
 }
 
-exports.handler = async (event, context, callback) => {
+exports.handler =  (event, context, callback) => {
     try {
         const timestamp = new Date().getTime();
         console.log("*****incoming body*****");
@@ -33,25 +33,25 @@ exports.handler = async (event, context, callback) => {
         
         if (typeof data.ingredients !== 'string') {
             const response = buildBadRequestResponse("ingredients is not string", context.requestId);
-            context.done(null, response);
+            callback(null, response);
             return;
         }
 
         if (typeof data.method !== 'string') {
             const response = buildBadRequestResponse("method is not string", context.requestId);
-            context.done(null, response);
+            callback(null, response);
             return;
         }
 
         if (typeof data.duration !== 'string') {
             const response = buildBadRequestResponse("duration is not string", context.requestId);
-            context.done(null, response);
+            callback(null, response);
             return;
         }
 
         if (typeof data.logo !== 'string') {
             const response = buildBadRequestResponse("logo is not string", context.requestId);
-            context.done(null, response);
+            callback(null, response);
             return;
         }
         
@@ -70,29 +70,27 @@ exports.handler = async (event, context, callback) => {
         console.log("*****dynamo payload*****");
         console.log(payload);
         
-        // const cb = (err, data) => {
-        //     console.log("*****dynamo data*****");
-        //     console.log(data);
-        //     if (err) {
-        //         const response = buildInternalErrorResponse(err, context.requestId);
-        //         console.log("*****error*****");
-        //         console.log(err);
-        //         context.done(null, response);
-        //     } else {
-        //         const response = {
-        //             isBase64Encoded: false,
-        //             statusCode: 200,
-        //             body: JSON.stringify({
-        //                 'message': JSON.stringify(data.Item),
-        //                 'input': event,
-        //             }),
-        //         };
-        //         console.log("*****done*****");
-        //         console.log(response);
-        //         context.done(null, response);
-        //     }
-        // };
-console.log("calling...");
+        const cb = (err, data) => {
+            console.log("*****dynamo data*****");
+            console.log(data);
+            if (err) {
+                const response = buildInternalErrorResponse(err, context.requestId);
+                console.log("*****error*****");
+                context.done(null, response);
+            } else {
+                const response = {
+                    isBase64Encoded: false,
+                    statusCode: 200,
+                    body: JSON.stringify({
+                        'message': JSON.stringify(data.Item),
+                        'input': event,
+                    }),
+                };
+                console.log("*****done*****");
+                
+                context.done(null, response);
+            }
+        }
         dynamodb.put(payload, function(err, data) {
             console.log("start putting");
             if (err) {
@@ -113,7 +111,6 @@ console.log("calling...");
             context.done(null, response);
             }
           });
-          console.log("called...");
         //dynamodb.putItem(payload, cb);
     } catch (error) {
         console.log("*****error*****");
