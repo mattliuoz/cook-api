@@ -72,6 +72,7 @@ exports.handler = async (event, context, callback) => {
         const cb = (err, data) => {
             if (err) {
                 const response = buildInternalErrorResponse(err, context.requestId);
+                console.log(err);
                 context.done(null, response);
             } else {
                 const response = {
