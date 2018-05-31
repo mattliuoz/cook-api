@@ -27,6 +27,7 @@ const buildInternalErrorResponse = function buildInternalErrorResponse(message, 
 exports.handler = async (event, context, callback) => {
     try {
         const timestamp = new Date().getTime();
+        console.log("*****incoming body*****");
         console.log(event.body);
         const data = JSON.parse(event.body);
         
@@ -66,12 +67,13 @@ exports.handler = async (event, context, callback) => {
                 updatedAt: timestamp,
             },
         };
-
+        console.log("*****dynamo payload*****");
         console.log(payload);
         
         const cb = (err, data) => {
             if (err) {
                 const response = buildInternalErrorResponse(err, context.requestId);
+                console.log("*****error*****");
                 console.log(err);
                 context.done(null, response);
             } else {
@@ -83,6 +85,8 @@ exports.handler = async (event, context, callback) => {
                         'input': event,
                     }),
                 };
+                console.log("*****done*****");
+                console.log(response);
                 context.done(null, response);
             }
         }
